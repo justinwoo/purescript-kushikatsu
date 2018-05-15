@@ -1,0 +1,18 @@
+{
+  "name": "purescript-hibachi",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output"
+  ],
+  "dependencies": {
+    "purescript-prelude": "#compiler/0.12",
+    "purescript-console": "#compiler/0.12",
+    "purescript-kushiyaki": "^0.0.2",
+    "purescript-variant": "#compiler/0.12"
+  },
+  "devDependencies": {
+    "purescript-assert": "#compiler/0.12"
+  }
+}
