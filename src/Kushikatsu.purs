@@ -1,4 +1,4 @@
-module Hibachi where
+module Kushikatsu where
 
 import Prelude
 

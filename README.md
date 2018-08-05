@@ -1,8 +1,10 @@
-# PureScript-Hibachi
+# PureScript-Kushikatsu
 
-Simple routing with [Kushiyaki](https://github.com/justinwoo/purescript-kushiyaki). Not to be confused with Teppanyaki (see [Wikipedia](https://en.wikipedia.org/wiki/Teppanyaki))
+Simple routing with [Kushiyaki](https://github.com/justinwoo/purescript-kushiyaki).
 
-!! Help Wanted: I couldn't find non-commercial photos of kushiyaki/yakitori on hibachi !!
+Wrapped kushiyaki is kushikatsu:
+
+![](https://i.imgur.com/GC18feC.jpg)
 
 Requires PureScript 0.12
 

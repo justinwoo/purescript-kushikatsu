@@ -2,12 +2,14 @@ module Test.Main where
 
 import Prelude
 
+import Data.Array as Array
 import Data.Either (Either(..))
 import Data.Traversable (traverse_)
 import Data.Variant as Variant
 import Effect (Effect)
-import Effect.Console (log)
-import Hibachi (NoMatch(..), RouteURL, matchRoutes)
+import Effect.Ref as Ref
+import Kushikatsu (NoMatch(..), RouteURL, matchRoutes)
+import Test.Assert (assertEqual)
 import Type.Prelude (RProxy(..))
 
 type RouteURLs =
@@ -18,6 +20,9 @@ type RouteURLs =
 
 main :: Effect Unit
 main = do
+  let snoc' a xs = Array.snoc xs a
+  ref <- Ref.new []
+
   let
     -- inferred type:
     -- (matchRoutes' :: String
@@ -40,22 +45,26 @@ main = do
       , "/no/match"
       ]
 
-    results = matchRoutes' <$> testRoutes
+    matched = matchRoutes' <$> testRoutes
     handleResult = case _ of
-      Left (NoMatch l) ->
-        log $ "no match for: " <> show l
+      Left (NoMatch l) -> do
+        Ref.modify_ (snoc' $ "no match: " <> l) ref
       Right r ->
         Variant.match
-          { hello: \x -> log $ "hello your name is " <> x.name
-          , age: \x -> log $ "hello you are " <> show x.age
-          , answer: \x -> log $ "you want " <> show x.count <> " of " <> x.item
+          { hello: \x -> Ref.modify_ (snoc' x.name) ref
+          , age: \x -> Ref.modify_ (snoc' $ show x.age) ref
+          , answer: \x ->  Ref.modify_ (snoc' $ show x.count <> "," <> x.item) ref
           }
           r
 
-  traverse_ handleResult results
+  traverse_ handleResult matched
 
-  -- result:
-  -- hello your name is Bill
-  -- hello you are 12
-  -- you want 24 of Apple
-  -- no match for: "/no/match"
+  actual <- Ref.read ref
+  let
+    expected =
+      [ "Bill"
+      , "12"
+      , "24,Apple"
+      , "no match: /no/match"
+      ]
+  assertEqual { actual, expected }
